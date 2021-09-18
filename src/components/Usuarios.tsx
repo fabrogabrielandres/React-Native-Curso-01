@@ -1,20 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
-import { reqRes } from "../api/reqRes";
-import { ReqResListado, Usuario } from "../interfaces/reqRes";
+import { Usuario } from "../interfaces/reqRes";
+import { UseUsuario } from "./Hook/UseUsuario";
 
 export const Usuarios = () => {
-  const [usuarios, setusuarios] = useState<Usuario[]>([]);
-  const pag = useRef(1);
+  const { usuarios } = UseUsuario();
 
-  useEffect(() => {
-    pagination();
-  }, []);
-
-  const pagination = async () => {
-    let resp = await reqRes.get<ReqResListado>(`/users?page=${pag.current}`);
-    setusuarios(resp.data.data);
-    pag.current = pag.current + 1;
-  };
   const renderUsuarios = (usuario: Usuario) => {
     let { first_name, last_name, avatar, id } = usuario;
     return (
@@ -33,6 +22,7 @@ export const Usuarios = () => {
     );
   };
 
+
   return (
     <>
       <h3>Usuario:</h3>
@@ -42,7 +32,12 @@ export const Usuarios = () => {
           <tr></tr>
         </tbody>
       </table>
-      <button className="btn btn-secondary" onClick={pagination}>
+      
+      <button className="btn btn-secondary">
+        Anterior
+      </button>
+
+      <button className="btn btn-secondary">
         Siguiente
       </button>
     </>
